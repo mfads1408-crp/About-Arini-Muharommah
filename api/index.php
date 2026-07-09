@@ -10,6 +10,18 @@ try {
         }
         $_SERVER['APP_PACKAGES_CACHE'] = '/tmp/storage/bootstrap/cache/packages.php';
         $_SERVER['APP_SERVICES_CACHE'] = '/tmp/storage/bootstrap/cache/services.php';
+
+        // Neon.tech SNI Fix for Vercel
+        foreach (['DB_URL', 'DATABASE_URL'] as $envKey) {
+            $dbUrl = $_ENV[$envKey] ?? $_SERVER[$envKey] ?? getenv($envKey);
+            if ($dbUrl && strpos($dbUrl, 'neon.tech') !== false && preg_match('/@(ep-[a-z0-9\-]+)\./', $dbUrl, $matches)) {
+                if (strpos($dbUrl, 'options=endpoint') === false) {
+                    $dbUrl .= (strpos($dbUrl, '?') !== false ? '&' : '?') . 'options=endpoint%3D' . $matches[1];
+                    $_ENV[$envKey] = $_SERVER[$envKey] = $dbUrl;
+                    putenv($envKey . '=' . $dbUrl);
+                }
+            }
+        }
     }
 
     require __DIR__ . '/../public/index.php';

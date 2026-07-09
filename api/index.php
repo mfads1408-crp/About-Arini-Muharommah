@@ -15,11 +15,15 @@ try {
         foreach (['DB_URL', 'DATABASE_URL'] as $envKey) {
             $dbUrl = $_ENV[$envKey] ?? $_SERVER[$envKey] ?? getenv($envKey);
             if ($dbUrl && strpos($dbUrl, 'neon.tech') !== false && preg_match('/@(ep-[a-z0-9\-]+)\./', $dbUrl, $matches)) {
-                if (strpos($dbUrl, 'options=endpoint') === false) {
-                    $dbUrl .= (strpos($dbUrl, '?') !== false ? '&' : '?') . 'options=endpoint%3D' . $matches[1];
-                    $_ENV[$envKey] = $_SERVER[$envKey] = $dbUrl;
-                    putenv($envKey . '=' . $dbUrl);
+                $endpoint = $matches[1];
+                // Remove existing options=endpoint if it exists
+                $dbUrl = preg_replace('/(\?|&)options=endpoint[^&]+/', '', $dbUrl);
+                // Prepend endpoint to username (endpoint$user)
+                if (strpos($dbUrl, $endpoint . '%24') === false) {
+                    $dbUrl = preg_replace('/:\/\/(.*?):/', '://' . $endpoint . '%24$1:', $dbUrl);
                 }
+                $_ENV[$envKey] = $_SERVER[$envKey] = $dbUrl;
+                putenv($envKey . '=' . $dbUrl);
             }
         }
     }

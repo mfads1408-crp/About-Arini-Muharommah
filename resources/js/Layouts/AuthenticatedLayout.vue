@@ -117,8 +117,14 @@ const toggleDarkMode = () => {
                             </div>
                         </div>
 
-                        <!-- Hamburger -->
+                        <!-- Hamburger and Mobile Dark Mode -->
                         <div class="-me-2 flex items-center sm:hidden">
+                            <!-- Mobile Dark Mode Toggle -->
+                            <button @click="toggleDarkMode" class="p-2 mr-1 text-rose-500 hover:text-rose-700 dark:text-rose-300 dark:hover:text-rose-100 transition-colors rounded-full hover:bg-rose-50 dark:hover:bg-night-700">
+                                <span v-if="isDark" class="text-xl">🌙</span>
+                                <span v-else class="text-xl">☀️</span>
+                            </button>
+
                             <button
                                 @click="
                                     showingNavigationDropdown =

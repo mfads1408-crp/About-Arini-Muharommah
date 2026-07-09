@@ -16,8 +16,13 @@ Route::get('/', function () {
 
 Route::get('/migrate-db-temp', function() {
     try {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        return 'Berhasil: ' . \Illuminate\Support\Facades\Artisan::output();
+        if (!\Illuminate\Support\Facades\Schema::hasColumn('users', 'role')) {
+            \Illuminate\Support\Facades\Schema::table('users', function ($table) {
+                $table->string('role')->default('user');
+            });
+            return 'Berhasil: Kolom role telah ditambahkan ke database!';
+        }
+        return 'Berhasil: Kolom role sudah ada di database.';
     } catch (\Exception $e) {
         return 'Gagal: ' . $e->getMessage();
     }

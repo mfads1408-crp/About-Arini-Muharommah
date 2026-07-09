@@ -15,8 +15,12 @@ Route::get('/', function () {
 });
 
 Route::get('/migrate-db-temp', function() {
-    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-    return 'Migrasi Vercel Berhasil!';
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        return 'Berhasil: ' . \Illuminate\Support\Facades\Artisan::output();
+    } catch (\Exception $e) {
+        return 'Gagal: ' . $e->getMessage();
+    }
 });
 
 Route::get('/dashboard', function () {

@@ -56,6 +56,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/users/{user}/journals', [\App\Http\Controllers\AdminController::class, 'showUserJournals'])->name('users.journals');
+    Route::get('/users/{user}/periods', [\App\Http\Controllers\AdminController::class, 'showUserPeriods'])->name('users.periods');
+    Route::get('/users/{user}/preferences', [\App\Http\Controllers\AdminController::class, 'showUserPreferences'])->name('users.preferences');
 });
 
 require __DIR__.'/auth.php';

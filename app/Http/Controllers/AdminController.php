@@ -25,4 +25,22 @@ class AdminController extends Controller
             'user' => $user
         ]);
     }
+
+    public function showUserPeriods(User $user)
+    {
+        $user->load('periodTrackers');
+        
+        return Inertia::render('Admin/Periods', [
+            'user' => $user
+        ]);
+    }
+
+    public function showUserPreferences(User $user)
+    {
+        $user->load('preferences');
+        
+        return Inertia::render('Admin/Preferences', [
+            'user' => $user
+        ]);
+    }
 }

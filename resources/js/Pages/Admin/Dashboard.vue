@@ -35,9 +35,17 @@ defineProps({
                                         <td class="py-3 px-4">{{ user.name }}</td>
                                         <td class="py-3 px-4">{{ user.email }}</td>
                                         <td class="py-3 px-4">
-                                            <Link :href="route('admin.users.journals', user.id)" class="text-rose-600 dark:text-rose-400 font-medium hover:underline">
-                                                Lihat Jurnal
-                                            </Link>
+                                            <div class="flex gap-4">
+                                                <Link :href="route('admin.users.journals', user.id)" class="text-rose-600 dark:text-rose-400 font-medium hover:underline text-sm">
+                                                    Lihat Jurnal
+                                                </Link>
+                                                <Link :href="route('admin.users.periods', user.id)" class="text-rose-600 dark:text-rose-400 font-medium hover:underline text-sm">
+                                                    Lihat Siklus
+                                                </Link>
+                                                <Link :href="route('admin.users.preferences', user.id)" class="text-rose-600 dark:text-rose-400 font-medium hover:underline text-sm">
+                                                    Lihat Preferensi
+                                                </Link>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr v-if="users.length === 0">

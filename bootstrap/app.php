@@ -35,14 +35,17 @@ return Application::configure(basePath: dirname(__DIR__))
 // Vercel read-only filesystem fix
 if (isset($_ENV['VERCEL']) || isset($_SERVER['VERCEL'])) {
     $app->useStoragePath('/tmp/storage');
+    $app->useDatabasePath('/tmp/database');
     
     // Create required directories in /tmp
-    $paths = ['/framework/views', '/framework/cache/data', '/logs', '/framework/sessions'];
+    $paths = ['/framework/views', '/framework/cache/data', '/logs', '/framework/sessions', '/bootstrap/cache'];
     foreach ($paths as $path) {
         if (!is_dir('/tmp/storage' . $path)) {
             @mkdir('/tmp/storage' . $path, 0777, true);
         }
     }
+
+    $app->useBootstrapPath('/tmp/storage/bootstrap');
 }
 
 return $app;

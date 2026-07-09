@@ -18,10 +18,18 @@ try {
                 $endpoint = $matches[1];
                 // Remove existing options=endpoint if it exists
                 $dbUrl = preg_replace('/(\?|&)options=endpoint[^&]+/', '', $dbUrl);
-                // Prepend endpoint to username (endpoint$user)
-                if (strpos($dbUrl, $endpoint . '%24') === false) {
-                    $dbUrl = preg_replace('/:\/\/(.*?):/', '://' . $endpoint . '%24$1:', $dbUrl);
+                // Remove the username prefix if it was added previously
+                $dbUrl = str_replace($endpoint . '%24', '', $dbUrl);
+                $dbUrl = str_replace($endpoint . '$', '', $dbUrl);
+                
+                // Inject options=endpoint into sslmode to bypass Laravel's array options and go straight to PDO DSN
+                if (strpos($dbUrl, 'sslmode=') !== false && strpos($dbUrl, ';options=endpoint') === false) {
+                    $dbUrl = str_replace('sslmode=require', 'sslmode=require;options=endpoint=' . $endpoint, $dbUrl);
+                    $dbUrl = str_replace('sslmode=prefer', 'sslmode=prefer;options=endpoint=' . $endpoint, $dbUrl);
+                } else if (strpos($dbUrl, 'sslmode=') === false) {
+                    $dbUrl .= (strpos($dbUrl, '?') !== false ? '&' : '?') . 'sslmode=require;options=endpoint=' . $endpoint;
                 }
+                
                 $_ENV[$envKey] = $_SERVER[$envKey] = $dbUrl;
                 putenv($envKey . '=' . $dbUrl);
             }

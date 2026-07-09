@@ -28,4 +28,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('preferences', \App\Http\Controllers\PreferenceController::class);
 });
 
+Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/users/{user}/journals', [\App\Http\Controllers\AdminController::class, 'showUserJournals'])->name('users.journals');
+});
+
 require __DIR__.'/auth.php';

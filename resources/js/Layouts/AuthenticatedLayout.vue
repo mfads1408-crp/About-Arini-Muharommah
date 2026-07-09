@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -8,13 +8,29 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+const isDark = ref(false);
+
+onMounted(() => {
+    isDark.value = document.documentElement.classList.contains('dark');
+});
+
+const toggleDarkMode = () => {
+    isDark.value = !isDark.value;
+    if (isDark.value) {
+        document.documentElement.classList.add('dark');
+        localStorage.theme = 'dark';
+    } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.theme = 'light';
+    }
+};
 </script>
 
 <template>
     <div>
-        <div class="min-h-screen bg-rose-50">
+        <div class="min-h-screen bg-rose-50 dark:bg-night-900 transition-colors duration-300">
             <nav
-                class="border-b border-gray-100 bg-white"
+                class="border-b border-gray-100 bg-white dark:bg-night-800 dark:border-night-700 transition-colors duration-300"
             >
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -39,10 +55,23 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Dashboard
                                 </NavLink>
+                                <NavLink
+                                    v-if="$page.props.auth.user.role === 'admin'"
+                                    :href="route('admin.dashboard')"
+                                    :active="route().current('admin.dashboard')"
+                                >
+                                    Admin Dashboard
+                                </NavLink>
                             </div>
                         </div>
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                            <!-- Dark Mode Toggle -->
+                            <button @click="toggleDarkMode" class="p-2 mr-2 text-rose-500 hover:text-rose-700 dark:text-rose-300 dark:hover:text-rose-100 transition-colors rounded-full hover:bg-rose-50 dark:hover:bg-night-700">
+                                <span v-if="isDark" class="text-xl">🌙</span>
+                                <span v-else class="text-xl">☀️</span>
+                            </button>
+
                             <!-- Settings Dropdown -->
                             <div class="relative ms-3">
                                 <Dropdown align="right" width="48">
@@ -50,7 +79,7 @@ const showingNavigationDropdown = ref(false);
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-rose-500 transition duration-150 ease-in-out hover:text-rose-700 focus:outline-none"
+                                                class="inline-flex items-center rounded-md border border-transparent bg-white dark:bg-night-800 px-3 py-2 text-sm font-medium leading-4 text-rose-500 dark:text-rose-300 transition duration-150 ease-in-out hover:text-rose-700 dark:hover:text-rose-100 focus:outline-none"
                                             >
                                                 {{ $page.props.auth.user.name }}
 
@@ -146,19 +175,26 @@ const showingNavigationDropdown = ref(false);
                         >
                             Dashboard
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            v-if="$page.props.auth.user.role === 'admin'"
+                            :href="route('admin.dashboard')"
+                            :active="route().current('admin.dashboard')"
+                        >
+                            Admin Dashboard
+                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
                     <div
-                        class="border-t border-gray-200 pb-1 pt-4"
+                        class="border-t border-gray-200 dark:border-night-700 pb-1 pt-4"
                     >
                         <div class="px-4">
                             <div
-                                class="text-base font-medium text-rose-800"
+                                class="text-base font-medium text-rose-800 dark:text-rose-300"
                             >
                                 {{ $page.props.auth.user.name }}
                             </div>
-                            <div class="text-sm font-medium text-rose-500">
+                            <div class="text-sm font-medium text-rose-500 dark:text-rose-400">
                                 {{ $page.props.auth.user.email }}
                             </div>
                         </div>
@@ -181,7 +217,7 @@ const showingNavigationDropdown = ref(false);
 
             <!-- Page Heading -->
             <header
-                class="bg-white shadow"
+                class="bg-white shadow dark:bg-night-800 transition-colors duration-300"
                 v-if="$slots.header"
             >
                 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">

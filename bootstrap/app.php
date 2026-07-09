@@ -20,16 +20,7 @@ $app = Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->render(function (\Throwable $e, Request $request) {
-            if (isset($_ENV['VERCEL']) || isset($_SERVER['VERCEL'])) {
-                echo "<h1>ORIGINAL ERROR: " . $e->getMessage() . "</h1>";
-                echo "<pre>" . $e->getTraceAsString() . "</pre>";
-                die();
-            }
-        });
-        $exceptions->shouldRenderJsonWhen(
-            fn (Request $request) => $request->is('api/*'),
-        );
+        //
     })->create();
 
 // Vercel read-only filesystem fix

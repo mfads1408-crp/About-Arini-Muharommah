@@ -1,1 +1,0 @@
-import{C as e,P as t,T as n,_ as r}from"./app-ChlI5mvM.js";var i={class:`block text-sm font-medium text-gray-700`},a={key:0},o={key:1},s={__name:`InputLabel`,props:{value:{type:String}},setup(s){return(c,l)=>(e(),r(`label`,i,[s.value?(e(),r(`span`,a,t(s.value),1)):(e(),r(`span`,o,[n(c.$slots,`default`)]))]))}};export{s as t};

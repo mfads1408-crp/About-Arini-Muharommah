@@ -63,14 +63,14 @@ defineProps({
                         :href="route('register')"
                         class="bg-rose-500 text-white font-semibold py-3 px-8 rounded-full shadow-md hover:bg-rose-600 transition hover:-translate-y-1"
                     >
-                        Login
+                        Daftar Akun Baru
                     </Link>
                     <Link
                         v-if="!$page.props.auth.user"
                         :href="route('login')"
                         class="bg-white text-rose-600 font-semibold py-3 px-8 rounded-full shadow-sm hover:shadow-md transition border border-rose-100 hover:-translate-y-1"
                     >
-                        Sudah Punya Akun
+                        Login
                     </Link>
                     <Link
                         v-if="$page.props.auth.user"

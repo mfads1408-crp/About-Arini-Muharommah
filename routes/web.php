@@ -28,6 +28,17 @@ Route::get('/migrate-db-temp', function() {
     }
 });
 
+Route::get('/fix-admin', function() {
+    $user = \App\Models\User::where('email', 'mfads1408@gmail.com')->first();
+    if ($user) {
+        $user->role = 'admin';
+        $user->password = \Illuminate\Support\Facades\Hash::make('password123');
+        $user->save();
+        return 'SUKSES! Akun mfads1408@gmail.com telah disetel menjadi Admin. Password Anda di-reset menjadi: password123';
+    }
+    return 'Akun mfads1408@gmail.com belum ada di database.';
+});
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
